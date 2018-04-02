@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TextField from 'material-ui/TextField';
 import NewItemsInput from '../NewItemsInput/NewItemsInput';
-import {reorderTodoAction, reorderListAction} from '../../../store/actions/desk';
+import {reorderTodoAction, reorderListAction, getItemsAction} from '../../../store/actions/desk';
 
 const grid = 8;
 
@@ -26,6 +26,7 @@ const styles = {
         padding: grid * 2,
         margin: `0 0 ${grid}px 0`,
         display: 'flex',
+        flexFlow: 'column nowrap',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         minWidth: 160,
@@ -96,36 +97,21 @@ class DeskArea extends Component {
     constructor(props) {
         super(props);
         this.onDragEnd = this.onDragEnd.bind(this);
-        this.state = {
-            items: [
-                {
-                    name: 'List1',
-                    id: 'list1',
-                    items: [
-                        {id: 'item-0', content: 'item 0'}, {id: 'item-1', content: 'item 1'}, {id: 'item-2', content: 'item 2'}, {id: 'item-3', content: 'item 3'},{id: 'item-4', content: 'item 4'}, {id: 'item-5', content: 'item 5'}, {id: 'item-6', content: 'item 6'}, {id: 'item-7', content: 'item 7'},{id: 'item-8', content: 'item 8'}, {id: 'item-9', content: 'item 9'}, {id: 'item-10', content: 'item 10'}, {id: 'item-11', content: 'item 11'}
-                    ]
-                },
-                    {
-                        name: 'List2',
-                        id: 'list2',
-                        items: [
-                            {id: 'item-15', content: 'item 15'}, {id: 'item-16', content: 'item 16'}, {id: 'item-12', content: 'item 12'}, {id: 'item-13', content: 'item 13'},{id: 'item-14', content: 'item 14'}
-                        ]
-                    },
-                    {
-                        name: 'List3',
-                        id: 'list3',
-                        items: [
-                            {id: 'item-20', content: 'item 20'}, {id: 'item-21', content: 'item 21'}, {id: 'item-22', content: 'item 22'}, {id: 'item-23', content: 'item 23'},{id: 'item-24', content: 'item 24'}, {id: 'item-25', content: 'item 25'}, {id: 'item-26', content: 'item 26'}
-                        ]
-                    }
-                ]
-        }
+        this.changeContent = this.changeContent.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.getItemsAction();
     }
 
     componentWillReceiveProps(nextProps) {
         console.log('nextProps', nextProps);
     }
+
+    changeContent(e, itemId) {
+
+    }
+
 
     onDragEnd(result) {
         // dropped nowhere
@@ -143,18 +129,18 @@ class DeskArea extends Component {
         switch (result.type) {
             case 'COLUMN':
                 const listData = {
-                    items: this.state.items,
+                    items: this.props.items,
                     source: result.source,
                     destination: result.destination
                 };
                 const [removed] = listData.items.splice(listData.source.index, 1);
                 listData.items.splice(listData.destination.index, 0, removed);
                 this.props.reorderListAction(listData.items);
-                //this.setState({items: listData.items});
+                this.setState({items: listData.items});
                 break;
             case 'ITEM':
                 const todoData = {
-                    items: this.state.items,
+                    items: this.props.items,
                     source: result.source,
                     destination: result.destination
                 };
@@ -167,7 +153,7 @@ class DeskArea extends Component {
                 todoData.items.splice(sourceIndex, 1, sourceItems);
                 todoData.items.splice(destinationIndex, 1, destinationItems);
                 this.props.reorderTodoAction(todoData.items);
-                //this.setState({items: todoData.items});
+                this.setState({items: todoData.items});
                 break;
 
         }
@@ -188,7 +174,7 @@ class DeskArea extends Component {
                             style={getListStyle(snapshot.isDraggingOver)}
                             {...provided.droppableProps}
                         >
-                            {this.state.items.map((list, index) => (
+                            {this.props.items.map((list, index) => (
                                 <Draggable key={list.id} draggableId={list.id} index={index} type="COLUMN">
                                     {(provided, snapshot) => (
                                         <div>
@@ -222,14 +208,24 @@ class DeskArea extends Component {
                                                                                     snapshot.isDragging,
                                                                                     provided.draggableProps.style
                                                                                 )}
+                                                                                onClick={(e)=>this.changeContent(e, item.id)}
                                                                             >
-                                                                                <TextField
-                                                                                    hintText="MultiLine with rows: 2 and rowsMax: 4"
-                                                                                    multiLine={true}
-                                                                                    rows={2}
-                                                                                    rowsMax={4}
-                                                                                    value={item.content}
-                                                                                />
+                                                                                <h4 style={{marginTop:0}}>{item.name}</h4>
+                                                                                {/*<TextField*/}
+                                                                                    {/*hintText="TODO Name"*/}
+                                                                                    {/*value=*/}
+                                                                                    {/*onChange={(e)=>this.changeName(e, item.id)}*/}
+                                                                                {/*/>*/}
+                                                                                <p style={{margin:0}}>{item.content}</p>
+                                                                                {/*<TextField*/}
+                                                                                    {/*hintText="TODO Message"*/}
+                                                                                    {/*multiLine={true}*/}
+                                                                                    {/*disabled={true}*/}
+                                                                                    {/*rows={2}*/}
+                                                                                    {/*rowsMax={4}*/}
+                                                                                    {/*value=*/}
+                                                                                    {/*onChange={(e)=>this.changeContent(e, item.id)}*/}
+                                                                                {/*/>*/}
                                                                             </div>
                                                                             {provided.placeholder}
                                                                         </div>
@@ -260,6 +256,9 @@ class DeskArea extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
+    getItemsAction: () => {
+        dispatch(getItemsAction());
+    },
     reorderTodoAction: (data) => {
         dispatch(reorderTodoAction(data));
     },

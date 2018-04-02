@@ -1,4 +1,7 @@
 import {
+    GET_ITEMS_REQUEST,
+    GET_ITEMS_SUCCESS,
+    GET_ITEMS_FAIL,
     ADD_TODO_REQUEST,
     ADD_TODO_SUCCESS,
     ADD_TODO_FAIL,
@@ -26,6 +29,7 @@ const initialState = {
 
 export default function (state = initialState, action) {
     switch (action.type) {
+        case GET_ITEMS_REQUEST:
         case ADD_TODO_REQUEST:
         case ADD_LIST_REQUEST:
         case REMOVE_TODO_REQUEST:
@@ -36,17 +40,20 @@ export default function (state = initialState, action) {
                 ...state,
                 isRequesting: true,
             };
+        case GET_ITEMS_SUCCESS:
         case ADD_TODO_SUCCESS:
         case ADD_LIST_SUCCESS:
         case REMOVE_TODO_SUCCESS:
         case REMOVE_LIST_SUCCESS:
         case REORDER_TODO_SUCCESS:
         case REORDER_LIST_SUCCESS:
+            console.log(state, action.payload);
             return {
                 ...state,
                 isRequesting: false,
-                items: action.payload,
+                items: [...action.payload],
             };
+        case GET_ITEMS_FAIL:
         case ADD_TODO_FAIL:
         case ADD_LIST_FAIL:
         case REMOVE_TODO_FAIL:

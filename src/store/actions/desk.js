@@ -4,6 +4,9 @@ import {apiRequest, apiSuccess, apiFail} from '../actions/api'
 
 import {
     BASE_URL,
+    GET_ITEMS_FAIL,
+    GET_ITEMS_REQUEST,
+    GET_ITEMS_SUCCESS,
     ADD_TODO_REQUEST,
     ADD_TODO_SUCCESS,
     ADD_TODO_FAIL,
@@ -24,15 +27,59 @@ import {
     REORDER_LIST_FAIL,
 } from '../constants';
 
+export const getItemsAction = () => dispatch => {
+    dispatch(apiRequest(GET_ITEMS_REQUEST));
 
-export const addTodoAction = todoData => dispatch => {
+    setTimeout(() => getItems(), 500);
+    function getItems() {
+
+        const items = [
+            {
+                name: 'List1',
+                id: 'list1',
+                items: [
+                    {id: 'item-0', name: 'Name', content: 'item 0'}, {id: 'item-1', name: 'Name', content: 'item 1'}, {id: 'item-2', name: 'Name', content: 'item 2'}, {id: 'item-3', name: 'Name', content: 'item 3'},{id: 'item-4', name: 'Name', content: 'item 4'}, {id: 'item-5', name: 'Name', content: 'item 5'}, {id: 'item-6', name: 'Name', content: 'item 6'}, {id: 'item-7', name: 'Name', content: 'item 7'},{id: 'item-8', name: 'Name', content: 'item 8'}, {id: 'item-9', name: 'Name', content: 'item 9'}, {id: 'item-10', name: 'Name', content: 'item 10'}, {id: 'item-11', name: 'Name', content: 'item 11'}
+                ]
+            },
+            {
+                name: 'List2',
+                id: 'list2',
+                items: [
+                    {id: 'item-15', name: 'Name', content: 'item 15'}, {id: 'item-16', name: 'Name', content: 'item 16'}, {id: 'item-12', name: 'Name', content: 'item 12'}, {id: 'item-13', name: 'Name', content: 'item 13'},{id: 'item-14', name: 'Name', content: 'item 14'}
+                ]
+            },
+            {
+                name: 'List3',
+                id: 'list3',
+                items: [
+                    {id: 'item-20', name: 'Name', content: 'item 20'}, {id: 'item-21', name: 'Name', content: 'item 21'}, {id: 'item-22', name: 'Name', content: 'item 22'}, {id: 'item-23', name: 'Name', content: 'item 23'},{id: 'item-24', name: 'Name', content: 'item 24'}, {id: 'item-25', name: 'Name', content: 'item 25'}, {id: 'item-26', name: 'Name', content: 'item 26'}
+                ]
+            }
+        ];
+        dispatch(apiSuccess(GET_ITEMS_SUCCESS, items))
+    }
+
+}
+
+export const addTodoAction = (item) => dispatch => {
     dispatch(apiRequest(ADD_TODO_REQUEST));
 
     setTimeout(() => addTodo(), 500);
     function addTodo() {
 
-        console.log('todoData', todoData)
-        dispatch(apiSuccess(ADD_TODO_SUCCESS, todoData))
+        console.log('todoData', item)
+        dispatch(apiSuccess(ADD_TODO_SUCCESS, item))
+    }
+
+}
+
+export const addListAction = (item) => dispatch => {
+    dispatch(apiRequest(ADD_LIST_REQUEST));
+
+    setTimeout(() => addTodo(), 500);
+    function addTodo() {
+
+        dispatch(apiSuccess(ADD_LIST_SUCCESS, item))
     }
 
 }

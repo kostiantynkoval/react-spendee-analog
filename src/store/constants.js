@@ -16,6 +16,9 @@ export const SNACKBAR_SHOW = 'SNACKBAR_SHOW';
 export const SNACKBAR_HIDE = 'SNACKBAR_HIDE';
 
 /* Desk Actions */
+export const GET_ITEMS_REQUEST = 'GET_ITEMS_REQUEST';
+export const GET_ITEMS_SUCCESS = 'GET_ITEMS_SUCCESS';
+export const GET_ITEMS_FAIL = 'GET_ITEMS_FAIL';
 export const ADD_TODO_REQUEST = 'ADD_TODO_REQUEST';
 export const ADD_TODO_SUCCESS = 'ADD_TODO_SUCCESS';
 export const ADD_TODO_FAIL = 'ADD_TODO_FAIL';

@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import AddCircle from 'material-ui/svg-icons/content/add-circle';
-import {addTodoAction} from '../../../store/actions/desk';
+import {addTodoAction, addListAction} from '../../../store/actions/desk';
 
 const styles = {
     form: {
@@ -27,25 +27,24 @@ class NewItemsInput extends React.Component {
     constructor(props) {
         super(props);
         this.submitForm = this.submitForm.bind(this);
-        this.state = {
-            items: this.props.items
-        }
+        // this.state = {
+        //     items: this.props.items
+        // }
     }
 
     submitForm(e) {
         e.preventDefault();
         console.log(e, this.props.listIndex);
         if(this.props.listIndex!=='COLUMN') {
-            // TODO dispatch add new TODO item
             const itemsArr = this.props.items;
-            const newItem = {id: new Date(), name: e.currentTarget[0].value, content: e.currentTarget[0].value}
+            const newItem = {id: Date.now(), name: e.currentTarget[0].value, content: e.currentTarget[0].value}
             itemsArr[this.props.listIndex].items.push(newItem);
             this.props.addTodoAction(itemsArr);
-           // this.props.addTodoAction(itemsArr);
-
-
+            e.currentTarget.reset();
         } else {
-            //this.props.addListAction(e.currentTarget[0].value)
+            const newList = this.props.items.concat({name: e.currentTarget[0].value, id: Date.now(), items: []})
+            this.props.addListAction(newList);
+            e.currentTarget.reset();
         }
     }
 
@@ -70,6 +69,9 @@ class NewItemsInput extends React.Component {
 const mapDispatchToProps = dispatch => ({
     addTodoAction: (data) => {
         dispatch(addTodoAction(data));
+    },
+    addListAction: (data) => {
+        dispatch(addListAction(data));
     },
 });
 
