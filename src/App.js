@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {loginAction} from './store/actions/auth';
 
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import Desk from './components/desk/Dashboard/Dashboard';
 import Login from './components/auth/Login/Login';
@@ -15,10 +15,6 @@ import './App.css';
 import {hideSnackbarAction} from "./store/actions/snackbar";
 
 class App extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     handleRequestClose = () => {
         this.props.hideSnackbarAction();

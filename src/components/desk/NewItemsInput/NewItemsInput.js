@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import TextField from 'material-ui/TextField';

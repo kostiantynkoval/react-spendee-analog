@@ -63,7 +63,6 @@ export default function (state = initialState, action) {
         case REMOVE_LIST_SUCCESS:
         case REORDER_TODO_SUCCESS:
         case REORDER_LIST_SUCCESS:
-            console.log(state, action.payload);
             return {
                 ...state,
                 isRequesting: false,

@@ -7,9 +7,9 @@ import {
 
 const initialState = {
     isItemWindowVisible: false,
-    islistWindowVisible: false,
-    listIndex: null,
-    item: {}
+    isListWindowVisible: false,
+    item: {},
+    list: {}
 };
 
 export default function (state = initialState, action) {
@@ -18,8 +18,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 isItemWindowVisible: true,
-                listIndex: action.payload.listIndex,
-                item: {...action.payload.item}
+                item: {...action.payload}
             };
         case ITEM_MODAL_HIDE:
             return {
@@ -32,6 +31,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 isListWindowVisible: true,
+                list: {...action.payload}
             };
         case LIST_MODAL_HIDE:
             return {

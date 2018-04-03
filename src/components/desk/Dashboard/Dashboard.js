@@ -6,6 +6,7 @@ import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import {logoutAction} from '../../../store/actions/auth';
 import DeskArea from '../DeskArea/DeskArea';
 import ItemModal from '../ItemModal/ItemModal';
+import ListNameModal from '../ListNameModal/ListNameModal';
 
 
 class Dashboard extends React.Component {
@@ -42,6 +43,8 @@ class Dashboard extends React.Component {
                 <DeskArea />
                 
                 <ItemModal/>
+
+                <ListNameModal/>
 
             </div>
         )

@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import {addTodoAction, addListAction} from '../../../store/actions/desk';
+import {addListAction} from '../../../store/actions/desk';
 import {changeItemAction, hideItemWindowAction, deleteItemAction} from '../../../store/actions/itemChange';
 
 const styles = {
@@ -29,7 +28,6 @@ class ItemsModal extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({name: nextProps.item.name, content: nextProps.item.content})
-        console.log('componentWillReceiveProps', nextProps)
     }
 
     handleClose = () => {

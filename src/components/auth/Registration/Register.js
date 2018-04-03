@@ -13,7 +13,6 @@ class Register extends React.Component {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
         this.onInput = this.onInput.bind(this);
-        console.log(this.props)
         this.state = {
             emailValue: '',
             emailValueErrorText: '',
@@ -27,34 +26,33 @@ class Register extends React.Component {
 
     onInput(event, newValue) {
         const errorVar = `${event.currentTarget.name}ErrorText`;
-        console.log(event.currentTarget.name);
         this.setState({[event.currentTarget.name]: newValue});
         this.setState({[errorVar]: ''});
     }
 
     onSubmit(event) {
-        const emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const passwReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
         event.preventDefault();
         if (this.state.emailValue === '') {
-            this.setState({emailValueErrorText: 'Email is required'})
+            this.setState({emailValueErrorText: '* Email is required'})
             return;
         }
         if (!emailReg.test(this.state.emailValue)) {
-            this.setState({emailValueErrorText: 'This email is not valid'})
+            this.setState({emailValueErrorText: '* This email is not valid'})
             return;
         }
         if (this.state.passwordValue === '') {
-            this.setState({passwordValueErrorText: 'Password is required'})
+            this.setState({passwordValueErrorText: '* Password is required'})
             return;
         }
         if (!passwReg.test(this.state.passwordValue)) {
-            this.setState({passwordValueErrorText: 'Password should contain min 6 chars, at least 1 letter and 1 number'})
+            this.setState({passwordValueErrorText: '* Password should contain min 6 chars, at least 1 letter and 1 number'})
             return;
         }
 
         if (this.state.confirmPasswordValue !== this.state.passwordValue) {
-            this.setState({confirmPasswordValueErrorText: 'Passwords do not match'})
+            this.setState({confirmPasswordValueErrorText: '* Passwords do not match'})
             return;
         }
 
@@ -64,10 +62,7 @@ class Register extends React.Component {
             password: this.state.passwordValue,
             email: this.state.emailValue
         });
-
         document.getElementsByTagName('form')[0].reset();
-
-        console.log('validation passed: ',this.state);
     }
 
     render() {
@@ -85,7 +80,7 @@ class Register extends React.Component {
                                 fullWidth={true}
                                 name="emailValue"
                                 hintText="Enter your email"
-                                floatingLabelText="Email"
+                                floatingLabelText="Email*"
                                 errorText={this.state.emailValueErrorText}
                                 onChange={(event, newValue) => this.onInput(event, newValue)}
                             />
@@ -95,7 +90,7 @@ class Register extends React.Component {
                                 fullWidth={true}
                                 name="passwordValue"
                                 hintText="Enter password"
-                                floatingLabelText="Password"
+                                floatingLabelText="Password*"
                                 type="password"
                                 errorText={this.state.passwordValueErrorText}
                                 onChange={(event, newValue) => this.onInput(event, newValue)}
@@ -106,7 +101,7 @@ class Register extends React.Component {
                                 fullWidth={true}
                                 name="confirmPasswordValue"
                                 hintText="Confirm password"
-                                floatingLabelText="Confirm Password"
+                                floatingLabelText="Confirm Password*"
                                 type="password"
                                 errorText={this.state.confirmPasswordValueErrorText}
                                 onChange={(event, newValue) => this.onInput(event, newValue)}

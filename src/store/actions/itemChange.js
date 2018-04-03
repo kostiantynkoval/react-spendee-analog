@@ -1,4 +1,3 @@
-// import {push} from 'react-router-redux';
 import {apiRequest, apiSuccess, apiFail} from '../actions/api'
 
 import {
@@ -23,8 +22,8 @@ export const hideItemWindowAction = () => dispatch => {
     dispatch(apiRequest(ITEM_MODAL_HIDE));
 }
 
-export const showListWindowAction = (item) => dispatch => {
-    dispatch(apiSuccess(LIST_MODAL_SHOW, item));
+export const showListWindowAction = (list) => dispatch => {
+    dispatch(apiSuccess(LIST_MODAL_SHOW, list));
 }
 
 export const hideListWindowAction = () => dispatch => {
@@ -33,8 +32,6 @@ export const hideListWindowAction = () => dispatch => {
 
 export const changeItemAction = (item, items) => dispatch => {
     dispatch(apiRequest(CHANGE_ITEM_REQUEST));
-    console.log('items', items);
-    console.log('itemID', item.id);
     setTimeout(() => changeItem(item, items), 500);
     function changeItem(item, items) {
         const itemIndexes = findItem(item, items)
@@ -47,8 +44,6 @@ export const changeItemAction = (item, items) => dispatch => {
 
 export const deleteItemAction = (item, items) => dispatch => {
     dispatch(apiRequest(DELETE_ITEM_REQUEST));
-    console.log('items', items);
-    console.log('itemID', item.id);
     setTimeout(() => delItem(item, items), 500);
     function delItem(item, items) {
         const itemIndexes = findItem(item, items)
@@ -63,7 +58,6 @@ export const deleteItemAction = (item, items) => dispatch => {
 function findItem(item, items) {
     let index,parentIndex = -1;
     for (let i = 0; i < items.length; i++) {
-        console.log('i', i);
         for(let j = 0; j < items[i].items.length; j++) {
             if (items[i].items[j].id===item.id) {
                 index = j;

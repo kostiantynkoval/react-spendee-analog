@@ -5,12 +5,9 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import NewItemsInput from '../NewItemsInput/NewItemsInput';
 import IconButton from 'material-ui/IconButton';
 import RemoveCircle from 'material-ui/svg-icons/content/remove-circle';
-import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
-import FlatButton from 'material-ui/FlatButton';
 import {red900} from 'material-ui/styles/colors';
 import {reorderTodoAction, reorderListAction, getItemsAction, removeListAction} from '../../../store/actions/desk';
-import {showItemWindowAction,showListWindowAction,hideListWindowAction} from '../../../store/actions/itemChange';
+import {showItemWindowAction,showListWindowAction} from '../../../store/actions/itemChange';
 
 const grid = 8;
 
@@ -120,19 +117,19 @@ class DeskArea extends Component {
         this.onDragEnd = this.onDragEnd.bind(this);
         this.changeContent = this.changeContent.bind(this);
         this.removeList = this.removeList.bind(this);
-        this.renameList = this.renameList.bind(this);
-        this.state = {
-            errorText: '',
-            value: this.props.value
-        }
+        this.showListNameWindow = this.showListNameWindow.bind(this);
     }
 
     componentDidMount() {
         this.props.getItemsAction();
     }
 
-    changeContent(e, item, index) {
-        this.props.showItemWindowAction({item, listIndex: index});
+    changeContent(item) {
+        this.props.showItemWindowAction(item);
+    }
+
+    showListNameWindow(list) {
+        this.props.showListWindowAction(list);
     }
 
     // All logic with items and lists handling contained here in order to not affect desk animations
@@ -179,7 +176,8 @@ class DeskArea extends Component {
                 this.props.reorderTodoAction(todoData.items);
                 this.setState({items: todoData.items});
                 break;
-
+            default:
+                break;
         }
 
     }
@@ -187,47 +185,12 @@ class DeskArea extends Component {
     removeList(id) {
         const newItems = this.props.items;
         const listIndex = newItems.findIndex(list => list.id === id);
-        console.log('listIndex', listIndex);
         newItems.splice(listIndex, 1);
         this.props.removeListAction(newItems);
     }
 
-    changeValue(event) {
-        this.setState({[event.target.name]: event.target.value});
-        if(this.state.errorText !== '' && event.target.name === 'name') {
-            this.setState({errorText: ''})
-        }
-    }
-
-    renameList(list) {
-        this.props.showListWindowAction();
-        const newItems = this.props.items;
-        const listIndex = newItems.findIndex(item => item.id === list.id);
-        console.log('listIndex', listIndex);
-
-        newItems[listIndex].name = '';
-        //newItems.splice(listIndex, 1);
-        //this.props.removeListAction(newItems);
-    }
-
-    // Normally you would want to split things out into separate components.
-    // But in this example everything is just done in one place for simplicity
     render() {
-        const actions = [
-            <FlatButton
-                label="Cancel"
-                primary={true}
-                onClick={this.handleClose}
-            />,
-            <FlatButton
-                label="Submit"
-                primary={true}
-                disabled={true}
-                onClick={this.handleClose}
-            />,
-        ];
         return (
-            <div>
             <DragDropContext onDragEnd={this.onDragEnd}>
                 <Droppable droppableId="droppable" direction="horizontal" type="COLUMN">
                     {(provided, snapshot) => (
@@ -249,7 +212,7 @@ class DeskArea extends Component {
                                                     provided.draggableProps.style
                                                 )}
                                             >
-                                                <span onClick={() => this.renameList(list)} style={styles.listTitle}>{list.name}
+                                                <span onClick={() => this.showListNameWindow(list)} style={styles.listTitle}>{list.name}
                                                 <IconButton style={styles.removeButton} onClick={() => this.removeList(list.id)}>
                                                     <RemoveCircle color={red900}/>
                                                 </IconButton>
@@ -274,7 +237,7 @@ class DeskArea extends Component {
                                                                                     snapshot.isDragging,
                                                                                     provided.draggableProps.style
                                                                                 )}
-                                                                                onClick={(e)=>this.changeContent(e, item)}
+                                                                                onClick={()=>this.changeContent(item)}
                                                                             >
                                                                                 <h4 style={{marginTop:0}}>{item.name}</h4>
                                                                                 <p style={{margin:0}}>{item.content}</p>
@@ -303,21 +266,6 @@ class DeskArea extends Component {
                     )}
                 </Droppable>
             </DragDropContext>
-                <Dialog
-                    title="List Title"
-                    actions={actions}
-                    modal={true}
-                    open={this.props.isListWindowVisible}
-                >
-                    <TextField
-                        value={this.state.value}
-                        onChange={this.changeValue}
-                        floatingLabelText="List Title"
-                        errorText={this.state.errorText}
-                    />
-                </Dialog>
-            </div>
-
         );
     }
 }
@@ -338,8 +286,8 @@ const mapDispatchToProps = dispatch => ({
     removeListAction: (items) => {
         dispatch(removeListAction(items));
     },
-    showListWindowAction: () => {
-        dispatch(showListWindowAction());
+    showListWindowAction: (list) => {
+        dispatch(showListWindowAction(list));
     },
 });
 

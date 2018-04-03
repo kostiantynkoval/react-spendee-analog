@@ -1,20 +1,14 @@
-import {push} from 'react-router-redux';
-import {apiRequest, apiSuccess, apiFail} from '../actions/api'
+import {apiRequest, apiSuccess} from '../actions/api'
 
 import {
     BASE_URL,
     GET_ITEMS_FAIL,
     GET_ITEMS_REQUEST,
     GET_ITEMS_SUCCESS,
-    CHANGE_ITEM_REQUEST,
-    CHANGE_ITEM_SUCCESS,
-    CHANGE_ITEM_FAIL,
     ADD_TODO_REQUEST,
     ADD_TODO_SUCCESS,
     ADD_TODO_FAIL,
-    REORDER_TODO_REQUEST,
     REORDER_TODO_SUCCESS,
-    REORDER_TODO_FAIL,
     ADD_LIST_REQUEST,
     ADD_LIST_SUCCESS,
     ADD_LIST_FAIL,
@@ -24,9 +18,8 @@ import {
     REMOVE_LIST_REQUEST,
     REMOVE_LIST_SUCCESS,
     REMOVE_LIST_FAIL,
-    REORDER_LIST_REQUEST,
     REORDER_LIST_SUCCESS,
-    REORDER_LIST_FAIL,
+    LIST_MODAL_HIDE,
 } from '../constants';
 
 export const getItemsAction = () => dispatch => {
@@ -116,6 +109,7 @@ export const renameListAction = items => dispatch => {
     setTimeout(() => reorderList(), 500);
     function reorderList() {
         dispatch(apiSuccess(RENAME_LIST_SUCCESS, items))
+        dispatch(apiRequest(LIST_MODAL_HIDE))
     }
 
 }
