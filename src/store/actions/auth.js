@@ -49,10 +49,15 @@ export const registerAction = regData => dispatch => {
         localStorage.removeItem('token');
         if (regData.email !== '' && regData.password !== '') {
 
-            localStorage.setItem(regData.email, regData.password);
-            dispatch(apiSuccess(REGISTER_SUCCESS, ''));
-            dispatch(apiSuccess(SNACKBAR_SHOW, 'Register Successful. Now you can log in.'));
-            dispatch(push('/login'));
+            if(localStorage.getItem(regData.email)) {
+                dispatch(apiFail(REGISTER_FAIL, ''));
+                dispatch(apiSuccess(SNACKBAR_SHOW, `Register Failed. User with email ${regData.email} already registered`));
+            } else {
+                localStorage.setItem(regData.email, regData.password);
+                dispatch(apiSuccess(REGISTER_SUCCESS, ''));
+                dispatch(apiSuccess(SNACKBAR_SHOW, 'Register Successful. Now you can log in.'));
+                dispatch(push('/login'));
+            }
         } else {
             dispatch(apiFail(REGISTER_FAIL, ''));
             dispatch(apiSuccess(SNACKBAR_SHOW, 'Register Failed'));

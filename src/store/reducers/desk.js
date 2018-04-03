@@ -2,6 +2,12 @@ import {
     GET_ITEMS_REQUEST,
     GET_ITEMS_SUCCESS,
     GET_ITEMS_FAIL,
+    CHANGE_ITEM_REQUEST,
+    CHANGE_ITEM_SUCCESS,
+    CHANGE_ITEM_FAIL,
+    DELETE_ITEM_REQUEST,
+    DELETE_ITEM_SUCCESS,
+    DELETE_ITEM_FAIL,
     ADD_TODO_REQUEST,
     ADD_TODO_SUCCESS,
     ADD_TODO_FAIL,
@@ -17,6 +23,9 @@ import {
     REMOVE_LIST_REQUEST,
     REMOVE_LIST_SUCCESS,
     REMOVE_LIST_FAIL,
+    RENAME_LIST_REQUEST,
+    RENAME_LIST_SUCCESS,
+    RENAME_LIST_FAIL,
     REORDER_LIST_REQUEST,
     REORDER_LIST_SUCCESS,
     REORDER_LIST_FAIL
@@ -25,11 +34,15 @@ import {
 const initialState = {
     isRequesting: false,
     items: [],
+
 };
 
 export default function (state = initialState, action) {
     switch (action.type) {
         case GET_ITEMS_REQUEST:
+        case CHANGE_ITEM_REQUEST:
+        case RENAME_LIST_REQUEST:
+        case DELETE_ITEM_REQUEST:
         case ADD_TODO_REQUEST:
         case ADD_LIST_REQUEST:
         case REMOVE_TODO_REQUEST:
@@ -41,6 +54,9 @@ export default function (state = initialState, action) {
                 isRequesting: true,
             };
         case GET_ITEMS_SUCCESS:
+        case CHANGE_ITEM_SUCCESS:
+        case RENAME_LIST_SUCCESS:
+        case DELETE_ITEM_SUCCESS:
         case ADD_TODO_SUCCESS:
         case ADD_LIST_SUCCESS:
         case REMOVE_TODO_SUCCESS:
@@ -54,6 +70,9 @@ export default function (state = initialState, action) {
                 items: [...action.payload],
             };
         case GET_ITEMS_FAIL:
+        case CHANGE_ITEM_FAIL:
+        case RENAME_LIST_FAIL:
+        case DELETE_ITEM_FAIL:
         case ADD_TODO_FAIL:
         case ADD_LIST_FAIL:
         case REMOVE_TODO_FAIL:

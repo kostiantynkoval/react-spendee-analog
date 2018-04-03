@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import AddCircle from 'material-ui/svg-icons/content/add-circle';
 import {addTodoAction, addListAction} from '../../../store/actions/desk';
+import {green500} from 'material-ui/styles/colors';
 
 const styles = {
     form: {
@@ -13,12 +14,13 @@ const styles = {
     },
     input: {
         marginTop: 0,
-        paddingTop: 23
+        paddingTop: 23,
+        minWidth: 200
     },
     iconButton: {
         position: 'absolute',
         top: 0,
-        right: 0,
+        right: -7,
     }
 }
 
@@ -27,22 +29,24 @@ class NewItemsInput extends React.Component {
     constructor(props) {
         super(props);
         this.submitForm = this.submitForm.bind(this);
-        // this.state = {
-        //     items: this.props.items
-        // }
+        this.state = {
+            errorText: ''
+        }
     }
 
     submitForm(e) {
         e.preventDefault();
-        console.log(e, this.props.listIndex);
+
+        // Return error if empty
+        if(e.currentTarget[0].value === '') {this.setState({errorText: 'This field is required'}); return false}
         if(this.props.listIndex!=='COLUMN') {
             const itemsArr = this.props.items;
-            const newItem = {id: Date.now(), name: e.currentTarget[0].value, content: e.currentTarget[0].value}
+            const newItem = {id: Date.now().toString(), name: e.currentTarget[0].value, content: ''}
             itemsArr[this.props.listIndex].items.push(newItem);
             this.props.addTodoAction(itemsArr);
             e.currentTarget.reset();
         } else {
-            const newList = this.props.items.concat({name: e.currentTarget[0].value, id: Date.now(), items: []})
+            const newList = this.props.items.concat({name: e.currentTarget[0].value, id: Date.now().toString(), items: []})
             this.props.addListAction(newList);
             e.currentTarget.reset();
         }
@@ -55,10 +59,13 @@ class NewItemsInput extends React.Component {
                     inputStyle={styles.input}
                     hintText={this.props.listIndex==='COLUMN' ? "Enter list name" : "Enter TODO name"}
                     floatingLabelText={this.props.listIndex==='COLUMN' ? "Add new list" : "Add new TODO"}
+                    errorText={this.state.errorText}
+                    errorStyle={{bottom: 5}}
                     fullWidth={true}
+                    onChange={() => this.setState({errorText: ''})}
                 />
                 <IconButton type="submit" style={styles.iconButton}>
-                    <AddCircle />
+                    <AddCircle color={green500} />
                 </IconButton>
             </form>
         )

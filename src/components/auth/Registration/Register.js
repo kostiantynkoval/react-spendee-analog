@@ -15,11 +15,11 @@ class Register extends React.Component {
         this.onInput = this.onInput.bind(this);
         console.log(this.props)
         this.state = {
-            emailValue: 'q',
+            emailValue: '',
             emailValueErrorText: '',
-            passwordValue: 'q',
+            passwordValue: '',
             passwordValueErrorText: '',
-            confirmPasswordValue: 'q',
+            confirmPasswordValue: '',
             confirmPasswordValueErrorText: '',
         }
     }
@@ -33,20 +33,32 @@ class Register extends React.Component {
     }
 
     onSubmit(event) {
+        const emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const passwReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
         event.preventDefault();
         if (this.state.emailValue === '') {
             this.setState({emailValueErrorText: 'Email is required'})
+            return;
+        }
+        if (!emailReg.test(this.state.emailValue)) {
+            this.setState({emailValueErrorText: 'This email is not valid'})
             return;
         }
         if (this.state.passwordValue === '') {
             this.setState({passwordValueErrorText: 'Password is required'})
             return;
         }
-
-        if (this.state.confirmPasswordValue === '') {
-            this.setState({confirmPasswordValueErrorText: 'Confirm Password field is required'})
+        if (!passwReg.test(this.state.passwordValue)) {
+            this.setState({passwordValueErrorText: 'Password should contain min 6 chars, at least 1 letter and 1 number'})
             return;
         }
+
+        if (this.state.confirmPasswordValue !== this.state.passwordValue) {
+            this.setState({confirmPasswordValueErrorText: 'Passwords do not match'})
+            return;
+        }
+
+
 
         this.props.registerAction({
             password: this.state.passwordValue,

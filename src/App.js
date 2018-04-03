@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import {loginAction} from './store/actions/auth';
 
 import { Route, Link } from 'react-router-dom';
-// import { Redirect } from 'react-router';
+import { Redirect } from 'react-router';
 import Desk from './components/desk/Dashboard/Dashboard';
 import Login from './components/auth/Login/Login';
 import Register from './components/auth/Registration/Register';
@@ -29,7 +29,9 @@ class App extends Component {
             <div>
                 {this.props.isRequesting ? <div className="fader"></div> : null}
                 <main>
-                    <Route exact={true} path="/" component={Desk} />
+                    <Route exact={true} path="/" render={() => (
+                        this.props.isLoggedIn ? (<Desk/>) : (<Redirect to="/login" />)
+                    )} />
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Register} />
                     {/*<Route exact path="/" render={() => (<Redirect to="/dashboard"/>)}/>*/}

@@ -1,4 +1,3 @@
-// import request from 'superagent';
 import {push} from 'react-router-redux';
 import {apiRequest, apiSuccess, apiFail} from '../actions/api'
 
@@ -7,18 +6,21 @@ import {
     GET_ITEMS_FAIL,
     GET_ITEMS_REQUEST,
     GET_ITEMS_SUCCESS,
+    CHANGE_ITEM_REQUEST,
+    CHANGE_ITEM_SUCCESS,
+    CHANGE_ITEM_FAIL,
     ADD_TODO_REQUEST,
     ADD_TODO_SUCCESS,
     ADD_TODO_FAIL,
-    REMOVE_TODO_REQUEST,
-    REMOVE_TODO_SUCCESS,
-    REMOVE_TODO_FAIL,
     REORDER_TODO_REQUEST,
     REORDER_TODO_SUCCESS,
     REORDER_TODO_FAIL,
     ADD_LIST_REQUEST,
     ADD_LIST_SUCCESS,
     ADD_LIST_FAIL,
+    RENAME_LIST_REQUEST,
+    RENAME_LIST_SUCCESS,
+    RENAME_LIST_FAIL,
     REMOVE_LIST_REQUEST,
     REMOVE_LIST_SUCCESS,
     REMOVE_LIST_FAIL,
@@ -61,36 +63,29 @@ export const getItemsAction = () => dispatch => {
 
 }
 
-export const addTodoAction = (item) => dispatch => {
+export const addTodoAction = (items) => dispatch => {
     dispatch(apiRequest(ADD_TODO_REQUEST));
 
     setTimeout(() => addTodo(), 500);
     function addTodo() {
-
-        console.log('todoData', item)
-        dispatch(apiSuccess(ADD_TODO_SUCCESS, item))
+        dispatch(apiSuccess(ADD_TODO_SUCCESS, items))
     }
 
 }
 
-export const addListAction = (item) => dispatch => {
+export const addListAction = (items) => dispatch => {
     dispatch(apiRequest(ADD_LIST_REQUEST));
 
     setTimeout(() => addTodo(), 500);
     function addTodo() {
-
-        dispatch(apiSuccess(ADD_LIST_SUCCESS, item))
+        dispatch(apiSuccess(ADD_LIST_SUCCESS, items))
     }
 
 }
 
 export const reorderTodoAction = todoData => dispatch => {
-    dispatch(apiRequest(REORDER_TODO_REQUEST));
-
     setTimeout(() => reorderTodo(), 500);
     function reorderTodo() {
-        console.log('todoData', todoData)
-
         dispatch(apiSuccess(REORDER_TODO_SUCCESS, todoData))
     }
 
@@ -98,12 +93,29 @@ export const reorderTodoAction = todoData => dispatch => {
 
 
 export const reorderListAction = listData => dispatch => {
-    dispatch(apiRequest(REORDER_LIST_REQUEST));
+    setTimeout(() => reorderList(), 500);
+    function reorderList() {
+        dispatch(apiSuccess(REORDER_LIST_SUCCESS, listData))
+    }
+
+}
+
+export const removeListAction = items => dispatch => {
+    dispatch(apiRequest(REMOVE_LIST_REQUEST));
 
     setTimeout(() => reorderList(), 500);
     function reorderList() {
+        dispatch(apiSuccess(REMOVE_LIST_SUCCESS, items))
+    }
 
-        dispatch(apiSuccess(REORDER_LIST_SUCCESS, listData))
+}
+
+export const renameListAction = items => dispatch => {
+    dispatch(apiRequest(RENAME_LIST_REQUEST));
+
+    setTimeout(() => reorderList(), 500);
+    function reorderList() {
+        dispatch(apiSuccess(RENAME_LIST_SUCCESS, items))
     }
 
 }

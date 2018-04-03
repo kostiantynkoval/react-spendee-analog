@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import {logoutAction} from '../../../store/actions/auth';
 import DeskArea from '../DeskArea/DeskArea';
+import ItemModal from '../ItemModal/ItemModal';
 
 
 class Dashboard extends React.Component {
@@ -22,7 +23,7 @@ class Dashboard extends React.Component {
     render() {
         return (
             <div>
-                {this.props.isRequesting ? <div className="fader"></div> : null}
+                {this.props.isAuthRequesting || this.props.isDeskRequesting ? <div className="fader"></div> : null}
                 <Toolbar style={{
                     backgroundColor: '#b7b7b7',
                     display: 'flex',
@@ -38,8 +39,9 @@ class Dashboard extends React.Component {
                     </ToolbarGroup>
                 </Toolbar>
 
-
-                <DeskArea/>
+                <DeskArea />
+                
+                <ItemModal/>
 
             </div>
         )
@@ -53,7 +55,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-    isRequesting: state.auth.isRequesting,
+    isAuthRequesting: state.auth.isRequesting,
+    isDeskRequesting: state.desk.isRequesting,
     isLoggedIn: state.auth.isLoggedIn,
     // token: state.auth.token,
 });
