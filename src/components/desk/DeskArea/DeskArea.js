@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import Moment from 'react-moment';
 import NewItemsInput from '../NewItemsInput/NewItemsInput';
 import IconButton from 'material-ui/IconButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import RemoveCircle from 'material-ui/svg-icons/content/remove-circle';
-import {red900} from 'material-ui/styles/colors';
-import {reorderTodoAction, reorderListAction, getItemsAction, removeListAction} from '../../../store/actions/desk';
-import {showItemWindowAction,showListWindowAction} from '../../../store/actions/itemChange';
+import { red900 } from 'material-ui/styles/colors';
+import { reorderTodoAction, reorderListAction, getItemsAction, removeListAction } from '../../../store/actions/desk';
+import { showItemWindowAction,showListWindowAction } from '../../../store/actions/itemChange';
 
 const grid = 8;
 
@@ -66,8 +68,9 @@ const styles = {
         padding: `${grid * 2}px 0`,
         color: '#999',
         display: 'flex',
-        flexFlow: 'row nowrap',
+        flexFlow: 'column nowrap',
         justifyContent: 'center',
+        alignItems: 'center',
         cursor: 'grab',
         backgroundColor: 'darkgreen',
         position: 'relative'
@@ -118,6 +121,9 @@ class DeskArea extends Component {
         this.changeContent = this.changeContent.bind(this);
         this.removeList = this.removeList.bind(this);
         this.showListNameWindow = this.showListNameWindow.bind(this);
+        this.calcTotal = this.calcTotal.bind(this);
+        this.showChart = this.showChart.bind(this);
+
     }
 
     componentDidMount() {
@@ -133,7 +139,6 @@ class DeskArea extends Component {
     }
 
     // All logic with items and lists handling contained here in order to not affect desk animations
-
     onDragEnd(result) {
         // dropped nowhere
         if (!result.destination) {
@@ -182,14 +187,30 @@ class DeskArea extends Component {
 
     }
 
-    removeList(id) {
+    calcTotal(id) {
+        // Find items of current category
+        const items = this.props.items.find(item => item.id === id).items;
+        // return sum of all item fields with key: amount
+        return items.map(item => parseFloat(item.amount)).reduce((prev, curr) => prev + curr);
+    }
+
+    showChart(e, id) {
+        e.stopPropagation();
+        this.props.history.push(`/chart/${id}`);
+    }
+
+    removeList(e, id) {
+        e.stopPropagation();
         const newItems = this.props.items;
         const listIndex = newItems.findIndex(list => list.id === id);
         newItems.splice(listIndex, 1);
         this.props.removeListAction(newItems);
     }
 
+
+
     render() {
+        console.log(this.props)
         return (
             <DragDropContext onDragEnd={this.onDragEnd}>
                 <Droppable droppableId="droppable" direction="horizontal" type="COLUMN">
@@ -212,10 +233,15 @@ class DeskArea extends Component {
                                                     provided.draggableProps.style
                                                 )}
                                             >
-                                                <span onClick={() => this.showListNameWindow(list)} style={styles.listTitle}>{list.name}
-                                                <IconButton style={styles.removeButton} onClick={() => this.removeList(list.id)}>
-                                                    <RemoveCircle color={red900}/>
-                                                </IconButton>
+                                                <span onClick={() => this.showListNameWindow(list)} style={styles.listTitle}>
+                                                    <div>{list.name}</div>
+                                                    <div>Total: ${this.calcTotal(list.id)}</div>
+                                                    <RaisedButton primary={true} onClick={e => this.showChart(e, list.id)}>
+                                                        See chart
+                                                    </RaisedButton>
+                                                    <IconButton style={styles.removeButton} onClick={(e) => this.removeList(e, list.id)}>
+                                                        <RemoveCircle color={red900}/>
+                                                    </IconButton>
                                                     </span>
 
 
@@ -241,6 +267,8 @@ class DeskArea extends Component {
                                                                             >
                                                                                 <h4 style={{marginTop:0}}>{item.name}</h4>
                                                                                 <p style={{margin:0}}>{item.content}</p>
+                                                                                <p style={{margin:0, marginTop: grid}}>Amount: ${item.amount}</p>
+                                                                                <p style={{margin:0, marginTop: grid}}><Moment format={'YYYY MMM Do, HH:mm'}>{item.date}</Moment></p>
                                                                             </div>
                                                                             {provided.placeholder}
                                                                         </div>

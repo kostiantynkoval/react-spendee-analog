@@ -25,32 +25,31 @@ import {
 export const getItemsAction = () => dispatch => {
     dispatch(apiRequest(GET_ITEMS_REQUEST));
 
-    setTimeout(() => getItems(), 500);
+    setTimeout(() => getItems(), 1500);
     function getItems() {
 
-        const items = [
+
+
+        /*const itemsArr = [
             {
-                name: 'List1',
-                id: 'list1',
+                name: 'Продукты',
+                id: 'products',
                 items: [
-                    {id: 'item-0', name: 'Name', content: 'item 0'}, {id: 'item-1', name: 'Name', content: 'item 1'}, {id: 'item-2', name: 'Name', content: 'item 2'}, {id: 'item-3', name: 'Name', content: 'item 3'},{id: 'item-4', name: 'Name', content: 'item 4'}, {id: 'item-5', name: 'Name', content: 'item 5'}, {id: 'item-6', name: 'Name', content: 'item 6'}, {id: 'item-7', name: 'Name', content: 'item 7'},{id: 'item-8', name: 'Name', content: 'item 8'}, {id: 'item-9', name: 'Name', content: 'item 9'}, {id: 'item-10', name: 'Name', content: 'item 10'}, {id: 'item-11', name: 'Name', content: 'item 11'}
+                    {id: 'item-0', name: 'Супермаркет', date: '2018-06-01T14:36', content: 'Крупы и прочие сыпучие', amount: 100}, {id: 'item-1', name: 'Рынок', date: '2018-06-02T18:15', content: 'Купил мяса на неделю', amount: 250}, {id: 'item-2', name: 'Продуктовый на углу', date: '2018-06-03T11:38', content: 'Сметанка к борщу', amount: 15},
                 ]
             },
             {
-                name: 'List2',
-                id: 'list2',
+                name: 'Развлечения',
+                id: 'leisure',
                 items: [
-                    {id: 'item-15', name: 'Name', content: 'item 15'}, {id: 'item-16', name: 'Name', content: 'item 16'}, {id: 'item-12', name: 'Name', content: 'item 12'}, {id: 'item-13', name: 'Name', content: 'item 13'},{id: 'item-14', name: 'Name', content: 'item 14'}
-                ]
-            },
-            {
-                name: 'List3',
-                id: 'list3',
-                items: [
-                    {id: 'item-20', name: 'Name', content: 'item 20'}, {id: 'item-21', name: 'Name', content: 'item 21'}, {id: 'item-22', name: 'Name', content: 'item 22'}, {id: 'item-23', name: 'Name', content: 'item 23'},{id: 'item-24', name: 'Name', content: 'item 24'}, {id: 'item-25', name: 'Name', content: 'item 25'}, {id: 'item-26', name: 'Name', content: 'item 26'}
+                    {id: 'item-3', name: 'Ресторан', date: '2018-06-01T19:20', content: 'Сходили поужинать', amount: 300}, {id: 'item-5', name: 'Кино', date: '2018-06-02T11:46', content: 'Сходили на новый мультфильм с семьей', amount: 200},
                 ]
             }
         ];
+        const itemsStr = JSON.stringify(itemsArr);
+        localStorage.setItem('items', itemsStr);*/
+        const items = JSON.parse(localStorage.getItem('items'));
+
         dispatch(apiSuccess(GET_ITEMS_SUCCESS, items))
     }
 
@@ -62,6 +61,7 @@ export const addTodoAction = (items) => dispatch => {
     setTimeout(() => addTodo(), 500);
     function addTodo() {
         dispatch(apiSuccess(ADD_TODO_SUCCESS, items))
+        localStorage.setItem('items', JSON.stringify(items))
     }
 
 }
@@ -72,23 +72,26 @@ export const addListAction = (items) => dispatch => {
     setTimeout(() => addTodo(), 500);
     function addTodo() {
         dispatch(apiSuccess(ADD_LIST_SUCCESS, items))
+        localStorage.setItem('items', JSON.stringify(items))
     }
 
 }
 
-export const reorderTodoAction = todoData => dispatch => {
+export const reorderTodoAction = items => dispatch => {
     setTimeout(() => reorderTodo(), 500);
     function reorderTodo() {
-        dispatch(apiSuccess(REORDER_TODO_SUCCESS, todoData))
+        dispatch(apiSuccess(REORDER_TODO_SUCCESS, items))
+        localStorage.setItem('items', JSON.stringify(items))
     }
 
 }
 
 
-export const reorderListAction = listData => dispatch => {
+export const reorderListAction = items => dispatch => {
     setTimeout(() => reorderList(), 500);
     function reorderList() {
-        dispatch(apiSuccess(REORDER_LIST_SUCCESS, listData))
+        dispatch(apiSuccess(REORDER_LIST_SUCCESS, items))
+        localStorage.setItem('items', JSON.stringify(items))
     }
 
 }
@@ -99,6 +102,7 @@ export const removeListAction = items => dispatch => {
     setTimeout(() => reorderList(), 500);
     function reorderList() {
         dispatch(apiSuccess(REMOVE_LIST_SUCCESS, items))
+        localStorage.setItem('items', JSON.stringify(items))
     }
 
 }
@@ -109,6 +113,7 @@ export const renameListAction = items => dispatch => {
     setTimeout(() => reorderList(), 500);
     function reorderList() {
         dispatch(apiSuccess(RENAME_LIST_SUCCESS, items))
+        localStorage.setItem('items', JSON.stringify(items))
         dispatch(apiRequest(LIST_MODAL_HIDE))
     }
 

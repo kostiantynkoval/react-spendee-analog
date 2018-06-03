@@ -3,11 +3,13 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {loginAction} from './store/actions/auth';
 
-import { Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import Desk from './components/desk/Dashboard/Dashboard';
 import Login from './components/auth/Login/Login';
 import Register from './components/auth/Registration/Register';
+import ChartPage from './components/chart/ChartPage/ChartPage';
+
 
 import Snackbar from 'material-ui/Snackbar';
 
@@ -25,12 +27,15 @@ class App extends Component {
             <div>
                 {this.props.isRequesting ? <div className="fader"></div> : null}
                 <main>
-                    <Route exact={true} path="/" render={() => (
-                        this.props.isLoggedIn ? (<Desk/>) : (<Redirect to="/login" />)
-                    )} />
-                    <Route exact path="/login" component={Login} />
-                    <Route exact path="/register" component={Register} />
-                    {/*<Route exact path="/" render={() => (<Redirect to="/dashboard"/>)}/>*/}
+                    <Switch>
+                        {/* TODO: Change <Desk/> to ' <Redirect to="/login" /> ' */}
+                        <Route exact={true} path="/" render={() => (
+                            this.props.isLoggedIn ? <Desk/> : <Desk/>
+                        )} />
+                        <Route path="/login" component={Login} />
+                        <Route path="/register" component={Register} />
+                        <Route path="/chart/:id" component={ChartPage}/>
+                    </Switch>
                 </main>
 
                 <Snackbar

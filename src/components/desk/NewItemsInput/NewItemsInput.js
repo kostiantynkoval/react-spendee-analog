@@ -57,8 +57,8 @@ class NewItemsInput extends React.Component {
             <form onSubmit={(e) => this.submitForm(e)} style={styles.form}>
                 <TextField
                     inputStyle={styles.input}
-                    hintText={this.props.listIndex==='COLUMN' ? "Enter list name" : "Enter TODO name"}
-                    floatingLabelText={this.props.listIndex==='COLUMN' ? "Add new list" : "Add new TODO"}
+                    hintText={this.props.listIndex==='COLUMN' ? "Enter category name" : "Enter item name"}
+                    floatingLabelText={this.props.listIndex==='COLUMN' ? "Add new category" : "Add new item"}
                     errorText={this.state.errorText}
                     errorStyle={{bottom: 5}}
                     fullWidth={true}

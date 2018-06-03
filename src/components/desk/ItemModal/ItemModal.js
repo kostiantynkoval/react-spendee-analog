@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import * as moment from 'moment';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -20,6 +21,8 @@ class ItemsModal extends React.Component {
         this.state = {
             name: this.props.item.name,
             content: this.props.item.content,
+            date: this.props.item.date,
+            amount: this.props.item.amount,
             errorText: ''
         };
         this.changeValue = this.changeValue.bind(this);
@@ -27,11 +30,15 @@ class ItemsModal extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({name: nextProps.item.name, content: nextProps.item.content})
+        this.setState({
+            name: nextProps.item.name,
+            content: nextProps.item.content,
+            date: nextProps.item.date,
+            amount: nextProps.item.amount
+        })
     }
 
     handleClose = () => {
-
         this.props.hideItemWindowAction();
     };
 
@@ -39,7 +46,9 @@ class ItemsModal extends React.Component {
         const deletedItem = {
             id: this.props.item.id,
             name: this.state.name,
-            content: this.state.content
+            content: this.state.content,
+            date: this.state.date,
+            amount: this.state.amount
         };
         this.props.deleteItemAction(deletedItem, this.props.items);
     }
@@ -53,13 +62,15 @@ class ItemsModal extends React.Component {
 
     submitForm(e) {
         if(this.state.errorText === '' && this.state.name === '') {
-            this.setState({errorText: '* TODO Name is required'});
+            this.setState({errorText: '* Item name is required'});
             return false;
         }
         const changedItem = {
             id: this.props.item.id,
             name: this.state.name,
-            content: this.state.content
+            content: this.state.content,
+            date: this.state.date,
+            amount: this.state.amount,
         };
         this.props.changeItemAction(changedItem, this.props.items);
         this.setState({errorText: ''});
@@ -88,21 +99,22 @@ class ItemsModal extends React.Component {
                 onClick={(e) => this.submitForm(e, document.forms[0].value)}
             />,
         ];
-
+console.log('', this.state);
+        const { isItemWindowVisible } = this.props;
         return (
             <div>
                 <Dialog
-                    title="TODO Item"
+                    title="Spending Item"
                     actions={actions}
                     modal={true}
-                    open={this.props.isItemWindowVisible}
+                    open={isItemWindowVisible}
                 >
                     <div style={{width: '100%', display: 'flex', flexFlow: 'column nowrap', justifyContent: 'center', alignItems: 'stretch'}} name="itemForm">
                         <TextField
                             fullWidth={true}
                             floatingLabelText="TODO Name *"
                             name="name"
-                            hintText="TODO Name"
+                            hintText="Spending  Name"
                             errorText={this.state.errorText}
                             value={this.state.name}
                             onChange={this.changeValue}
@@ -110,11 +122,30 @@ class ItemsModal extends React.Component {
                         <TextField
                             name="content"
                             fullWidth={true}
-                            floatingLabelText="TODO Message"
+                            floatingLabelText="Spending  Description"
                             multiLine={true}
-                            rows={2}
+                            rows={1}
                             rowsMax={4}
                             value={this.state.content}
+                            onChange={this.changeValue}
+                        />
+                        <TextField
+                            fullWidth={true}
+                            floatingLabelText="Date"
+                            type="datetime-local"
+                            name="date"
+                            hintText="Date"
+                            errorText={this.state.errorText}
+                            value={moment(this.state.date).format('YYYY-MM-DD[T]HH:mm')}
+                            onChange={this.changeValue}
+                        />
+                        <TextField
+                            fullWidth={true}
+                            floatingLabelText="Amount *"
+                            name="amount"
+                            hintText="Spending Amount"
+                            errorText={this.state.errorText}
+                            value={this.state.amount}
                             onChange={this.changeValue}
                         />
                     </div>

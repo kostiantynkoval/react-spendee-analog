@@ -37,6 +37,7 @@ export const changeItemAction = (item, items) => dispatch => {
         const itemIndexes = findItem(item, items)
         items[itemIndexes.parentIndex].items.splice(itemIndexes.index,1,item);
         dispatch(apiSuccess(CHANGE_ITEM_SUCCESS, items))
+        localStorage.setItem('items', JSON.stringify(items))
         dispatch(apiRequest(ITEM_MODAL_HIDE));
     }
 
@@ -49,6 +50,7 @@ export const deleteItemAction = (item, items) => dispatch => {
         const itemIndexes = findItem(item, items)
         items[itemIndexes.parentIndex].items.splice(itemIndexes.index,1);
         dispatch(apiSuccess(DELETE_ITEM_SUCCESS, items))
+        localStorage.setItem('items', JSON.stringify(items))
         dispatch(apiRequest(ITEM_MODAL_HIDE));
     }
 

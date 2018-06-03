@@ -3,6 +3,12 @@
 # dependencies
 /node_modules
 
+#config
+/config
+
+#scripts
+/scripts
+
 # testing
 /coverage
 

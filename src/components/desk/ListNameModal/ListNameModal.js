@@ -56,7 +56,7 @@ class ListNameModal extends React.Component {
             <RaisedButton
                 style={styles.button}
                 label="Cancel"
-                onClick={this.handleClose}
+                onClick={() => this.handleClose()}
             />,
             <RaisedButton
                 style={styles.button}

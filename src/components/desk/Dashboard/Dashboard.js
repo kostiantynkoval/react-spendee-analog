@@ -33,7 +33,7 @@ class Dashboard extends React.Component {
                     alignItems: 'center'
                 }} >
                     <ToolbarGroup>
-                        <ToolbarTitle text="Simple React Desk"/>
+                        <ToolbarTitle text="React Spendee Lite"/>
                     </ToolbarGroup>
                     <ToolbarGroup>
                         <RaisedButton label="Logout" secondary={true} style={{width: '120px'}} onClick={this.handleLogout} />
