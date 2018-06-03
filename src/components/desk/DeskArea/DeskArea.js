@@ -188,8 +188,11 @@ class DeskArea extends Component {
     }
 
     calcTotal(id) {
+        console.log(this.props.items, this.props.items.length);
         // Find items of current category
         const items = this.props.items.find(item => item.id === id).items;
+        // Check if no items in array - return 0
+        if (items.length === 0) return 0;
         // return sum of all item fields with key: amount
         return items.map(item => parseFloat(item.amount)).reduce((prev, curr) => prev + curr);
     }
@@ -235,7 +238,7 @@ class DeskArea extends Component {
                                             >
                                                 <span onClick={() => this.showListNameWindow(list)} style={styles.listTitle}>
                                                     <div>{list.name}</div>
-                                                    <div>Total: ${this.calcTotal(list.id)}</div>
+                                                    <div>Total: ${this.calcTotal(list.id).toFixed(2)}</div>
                                                     <RaisedButton primary={true} onClick={e => this.showChart(e, list.id)}>
                                                         See chart
                                                     </RaisedButton>
@@ -267,7 +270,7 @@ class DeskArea extends Component {
                                                                             >
                                                                                 <h4 style={{marginTop:0}}>{item.name}</h4>
                                                                                 <p style={{margin:0}}>{item.content}</p>
-                                                                                <p style={{margin:0, marginTop: grid}}>Amount: ${item.amount}</p>
+                                                                                <p style={{margin:0, marginTop: grid}}>Amount: ${parseFloat(item.amount).toFixed(2) || 0}</p>
                                                                                 <p style={{margin:0, marginTop: grid}}><Moment format={'YYYY MMM Do, HH:mm'}>{item.date}</Moment></p>
                                                                             </div>
                                                                             {provided.placeholder}

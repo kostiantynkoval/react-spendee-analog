@@ -34,7 +34,7 @@ class App extends Component {
                         )} />
                         <Route path="/login" component={Login} />
                         <Route path="/register" component={Register} />
-                        <Route path="/chart/:id" component={ChartPage}/>
+                        <Route path="/chart/:id" render={(props, thms) => {console.log(props, thms); return <ChartPage/>}}/>
                     </Switch>
                 </main>
 

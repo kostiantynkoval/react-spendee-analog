@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import * as moment from 'moment';
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import AddCircle from 'material-ui/svg-icons/content/add-circle';
@@ -37,16 +38,19 @@ class NewItemsInput extends React.Component {
     submitForm(e) {
         e.preventDefault();
 
+        const now = moment().format('YYYY-MM-DD[T]HH:mm');
+        const rndID = moment().valueOf().toString();
+
         // Return error if empty
         if(e.currentTarget[0].value === '') {this.setState({errorText: 'This field is required'}); return false}
         if(this.props.listIndex!=='COLUMN') {
             const itemsArr = this.props.items;
-            const newItem = {id: Date.now().toString(), name: e.currentTarget[0].value, content: ''}
+            const newItem = {id: rndID, name: e.currentTarget[0].value, content: '', date: now, amount: 0}
             itemsArr[this.props.listIndex].items.push(newItem);
             this.props.addTodoAction(itemsArr);
             e.currentTarget.reset();
         } else {
-            const newList = this.props.items.concat({name: e.currentTarget[0].value, id: Date.now().toString(), items: []})
+            const newList = this.props.items.concat({name: e.currentTarget[0].value, id: rndID, items: []})
             this.props.addListAction(newList);
             e.currentTarget.reset();
         }

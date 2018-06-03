@@ -23,7 +23,8 @@ class ItemsModal extends React.Component {
             content: this.props.item.content,
             date: this.props.item.date,
             amount: this.props.item.amount,
-            errorText: ''
+            errorNameText: '',
+            errorAmountText: '',
         };
         this.changeValue = this.changeValue.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
@@ -55,14 +56,22 @@ class ItemsModal extends React.Component {
 
     changeValue(event) {
         this.setState({[event.target.name]: event.target.value});
-        if(this.state.errorText !== '' && event.target.name === 'name') {
-            this.setState({errorText: ''})
+        if(this.state.errorNameText !== '' && event.target.name === 'name') {
+            this.setState({errorNameText: ''})
+        }
+        if(this.state.errorAmountText !== '' && event.target.name === 'amount') {
+            this.setState({errorAmountText: ''})
         }
     }
 
     submitForm(e) {
-        if(this.state.errorText === '' && this.state.name === '') {
-            this.setState({errorText: '* Item name is required'});
+        const regExp = /\d+((.\d{0,2})?)$/;
+        if(this.state.errorNameText === '' && this.state.name === '') {
+            this.setState({errorNameText: '* Item name is required'});
+            return false;
+        }
+        if(this.state.errorAmountText === '' && !regExp.test(this.state.amount)) {
+            this.setState({errorAmountText: '* Item amount is a floated number'});
             return false;
         }
         const changedItem = {
@@ -70,10 +79,10 @@ class ItemsModal extends React.Component {
             name: this.state.name,
             content: this.state.content,
             date: this.state.date,
-            amount: this.state.amount,
+            amount: parseFloat(this.state.amount),
         };
         this.props.changeItemAction(changedItem, this.props.items);
-        this.setState({errorText: ''});
+        this.setState({errorNameText: '', errorAmountText: ''});
         e.preventDefault()
     }
 
@@ -95,7 +104,7 @@ class ItemsModal extends React.Component {
                 label="Submit"
                 type="submit"
                 primary={true}
-                disabled={this.state.errorText !== ''}
+                disabled={this.state.errorNameText !== '' || this.state.errorAmountText !== ''}
                 onClick={(e) => this.submitForm(e, document.forms[0].value)}
             />,
         ];
@@ -115,7 +124,7 @@ console.log('', this.state);
                             floatingLabelText="TODO Name *"
                             name="name"
                             hintText="Spending  Name"
-                            errorText={this.state.errorText}
+                            errorText={this.state.errorNameText}
                             value={this.state.name}
                             onChange={this.changeValue}
                         />
@@ -135,7 +144,6 @@ console.log('', this.state);
                             type="datetime-local"
                             name="date"
                             hintText="Date"
-                            errorText={this.state.errorText}
                             value={moment(this.state.date).format('YYYY-MM-DD[T]HH:mm')}
                             onChange={this.changeValue}
                         />
@@ -144,7 +152,7 @@ console.log('', this.state);
                             floatingLabelText="Amount *"
                             name="amount"
                             hintText="Spending Amount"
-                            errorText={this.state.errorText}
+                            errorText={this.state.errorAmountText}
                             value={this.state.amount}
                             onChange={this.changeValue}
                         />
